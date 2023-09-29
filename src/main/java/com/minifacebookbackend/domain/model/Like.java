@@ -15,6 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Like {
     @Id
     private String id;
-    private Post post;
-    private User user;
+    private String userId;
+    private String postId;
 }

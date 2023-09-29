@@ -16,5 +16,5 @@ public class Image {
    @Id
     private String id;
     private String url;
-    private Post post;
+    private String postId;
 }
