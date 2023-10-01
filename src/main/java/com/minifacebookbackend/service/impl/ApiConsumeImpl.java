@@ -15,14 +15,16 @@ import java.util.HashMap;
 
 @Service
 public class ApiConsumeImpl implements ApiConsume {
-    @Value("${GRANT_TYPE}")
+    @Value("${keycloak.grantType}")
     private String grantType;
-    @Value("${CLIENT_ID}")
+    @Value("${keycloak.clientId}")
     private String clientId;
-    @Value("${CLIENT_SECRET}")
+    @Value("${keycloak.clientSecret}")
     private String clientSecret;
-    @Value("${KEYCLOAK_SERVER_URL}")
+    @Value("${keycloak.serverUrl}")
     private String keycloakServerUrl;
+    @Value("${keycloak.realmName}")
+    private String realmName;
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -34,7 +36,7 @@ public class ApiConsumeImpl implements ApiConsume {
         System.out.println("Client secret : "+clientSecret);
 
         HttpHeaders headers = new HttpHeaders();
-        String loginApi = keycloakServerUrl+"/protocol/openid-connect/token";
+        String loginApi = keycloakServerUrl+"/realms/"+realmName+"/protocol/openid-connect/token";
         System.out.println("Client id : "+loginApi);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
@@ -72,4 +74,5 @@ public class ApiConsumeImpl implements ApiConsume {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
         }
     }
+    public void createUser(){}
 }
