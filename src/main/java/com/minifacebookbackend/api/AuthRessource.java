@@ -6,15 +6,13 @@ import com.minifacebookbackend.service.ApiConsume;
 import com.minifacebookbackend.service.impl.RegistrationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
 @RestController
 @RequestMapping(ResourcePath.AUTHENTIFICATION)
+@CrossOrigin("*")
 public class AuthRessource {
     @Autowired
     private ApiConsume apiConsume;
@@ -22,11 +20,15 @@ public class AuthRessource {
     private RegistrationServiceImpl registrationService;
 
     @PostMapping("/login")
-    public ResponseEntity<HashMap<String, Object>> login(String email, String password){
+    public ResponseEntity<Object> login(String email, String password){
         return apiConsume.authenticate(email, password);
     }
     @PostMapping("/register")
     public ResponseEntity<?>  register(@RequestBody UserCommand userCommand){
         return registrationService.register(userCommand);
+    }
+    @PostMapping("/validateToken")
+    public ResponseEntity<HashMap<String,Object>> validateToken(String token){
+        return apiConsume.validateToken(token);
     }
 }
