@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ImageRepresentation {
     private String id;
     private String url;
+    private byte[] imageBytes;
 }

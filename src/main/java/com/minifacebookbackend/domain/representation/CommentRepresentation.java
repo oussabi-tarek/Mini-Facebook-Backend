@@ -14,5 +14,5 @@ public class CommentRepresentation {
     private String comment;
     private String createdAt;
     private String updatedAt;
-    private String userId;
+    private UserRepresentation user;
 }

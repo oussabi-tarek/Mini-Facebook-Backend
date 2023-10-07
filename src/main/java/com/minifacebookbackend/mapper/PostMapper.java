@@ -3,7 +3,6 @@ package com.minifacebookbackend.mapper;
 import com.minifacebookbackend.domain.model.Post;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

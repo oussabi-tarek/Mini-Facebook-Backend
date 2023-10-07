@@ -1,6 +1,5 @@
-package com.minifacebookbackend.domain.command;
+package com.minifacebookbackend.domain.representation;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TagCommand {
+public class UnLikeRepresentation {
     private String id;
-    private String content;
+    private String userId;
     private String postId;
 }

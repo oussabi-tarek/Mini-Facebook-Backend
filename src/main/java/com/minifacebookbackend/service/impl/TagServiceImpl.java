@@ -2,8 +2,11 @@ package com.minifacebookbackend.service.impl;
 
 import com.minifacebookbackend.domain.command.TagCommand;
 import com.minifacebookbackend.domain.model.Tag;
+import com.minifacebookbackend.domain.representation.TagRepresentation;
+import com.minifacebookbackend.mapper.TagMapper;
 import com.minifacebookbackend.repository.TagRepository;
 import com.minifacebookbackend.service.TagService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
-    @Autowired
-    private TagRepository tagRepository;
-
+    private final TagRepository tagRepository;
+    private final TagMapper tagMapper;
     @Override
     public Tag saveTag(TagCommand tagCommand) {
         if(tagCommand == null){
@@ -38,14 +41,11 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag updateTag(TagCommand tagCommand){
-        if(tagCommand.isNew()){
-           return saveTag(tagCommand);
-        }else {
             Tag tag=tagRepository.findById(tagCommand.getId()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag id is not valid"));
             tag.setContent(tagCommand.getContent());
             tag.setPostId(tagCommand.getPostId());
             return tagRepository.save(tag);
-        }
+
     }
 
     @Override
@@ -63,4 +63,10 @@ public class TagServiceImpl implements TagService {
             updateTag(tagCommand);
         }
     }
+
+    @Override
+    public List<TagRepresentation> getTagsByPostId(String postId){
+      return tagMapper.toTagRepresentationList(tagRepository.findAllByPostId(postId));
+    }
+
 }

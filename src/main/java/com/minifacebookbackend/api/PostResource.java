@@ -1,6 +1,7 @@
 package com.minifacebookbackend.api;
 
 import com.minifacebookbackend.api.common.ResourcePath;
+import com.minifacebookbackend.domain.command.ImageCommand;
 import com.minifacebookbackend.domain.command.PostCommand;
 import com.minifacebookbackend.domain.model.Post;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
@@ -9,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,10 +35,12 @@ public class PostResource {
         return ResponseEntity.ok(postService.getAll());
     }
 
-    @PostMapping
-    public ResponseEntity<Post> savePost(@RequestBody PostCommand postCommand) {
-        log.info("ajouter un nouveau post : {}", postCommand);
-        return ResponseEntity.ok(postService.savePost(postCommand));
+    @PostMapping(consumes = {"multipart/form-data", "application/json"})
+    public ResponseEntity<Post> savePost(@RequestPart("userId") String userId,
+                                         @RequestPart("content") String content,
+                                         @RequestPart("file") MultipartFile file) throws IOException {
+        log.info("ajouter un nouveau post : ");
+        return ResponseEntity.ok(postService.savePost(userId, content, file));
     }
     @PutMapping("/{postId}")
     public ResponseEntity<Post> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId) {

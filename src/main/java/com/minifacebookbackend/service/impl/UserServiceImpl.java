@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
     public List<UserRepresentation> getAll(){
         List<User> users=userRepository.findAll().stream().toList();
         return userMapper.toUserRepresentationList(users);
-
     }
 
 }
