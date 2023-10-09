@@ -1,18 +1,23 @@
 package com.minifacebookbackend.service.impl;
 
 import com.minifacebookbackend.domain.command.PostCommand;
+import com.minifacebookbackend.domain.command.TagCommand;
 import com.minifacebookbackend.domain.model.Post;
+import com.minifacebookbackend.domain.representation.LikeRepresentation;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
+import com.minifacebookbackend.domain.representation.UserRepresentation;
 import com.minifacebookbackend.mapper.PostMapper;
 import com.minifacebookbackend.repository.PostRepository;
 import com.minifacebookbackend.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,25 +29,49 @@ public class PostServiceImpl implements PostService {
     private final TagServiceImpl tagService;
     private final CommentServiceImpl commentService;
     private final LikeServiceImpl likeService;
+    private final UnLikeServiceImpl unLikeService;
+    private final UserServiceImpl userService;
 
     @Override
     public PostRepresentation getPostById(String postId) {
-        return postMapper.toPostRepresentation(postRepository.findById(postId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "post id is not valid")));
+        Post post= postRepository.findById(postId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "post id is not valid"));
+        PostRepresentation postRepresentation = postMapper.toPostRepresentation(post);
+        return getInfos(postRepresentation,post);
     }
-    @Override
-    public Post savePost(PostCommand postCommand) {
-        if(postCommand == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "bad request");
-        }
-        Post post = new Post();
-        post.setContent(postCommand.getContent());
-        post.setCreatedDate(LocalDateTime.now().toString());
-        post.setUserId(postCommand.getUserId());
-        post.setImages(imageService.saveImages(postCommand.getImages()));
-        post.setTags(tagService.saveTags(postCommand.getTags()));
-        return postRepository.save(post);
+    public PostRepresentation getInfos(PostRepresentation postRepresentation,Post post){
+        postRepresentation.setUser(userService.getById(post.getUserId()));
+        postRepresentation.setLikes(likeService.getLikesByPostId(post.getId()));
+        postRepresentation.setTags(tagService.getTagsByPostId(post.getId()));
+        postRepresentation.setImages(imageService.getImagesByPostId(post.getId()));
+        postRepresentation.setComments(commentService.getCommentsByPostId(post.getId()));
+        postRepresentation.setUnLikes(unLikeService.getUnLikesByPostId(post.getId()));
+        return postRepresentation;
     }
 
+    @Override
+    public Post savePost(String userId, String content, MultipartFile file) throws IOException {
+        Post post = new Post();
+        post.setContent(content);
+        post.setCreatedDate(LocalDateTime.now().toString());
+        post.setUserId(userId);
+        postRepository.save(post);
+        post.setImages(imageService.saveImages(file,post.getId()));
+        post.setTags(tagService.saveTags(getTagsFromContent(content,post.getId())));
+        return postRepository.save(post);
+    }
+    public List<TagCommand> getTagsFromContent(String content,String postId){
+        List<TagCommand> tags = new ArrayList<>();
+        String[] words = content.split(" ");
+        for(String word:words){
+            if(word.startsWith("#")){
+                TagCommand tag = new TagCommand();
+                tag.setContent(word);
+                tag.setPostId(postId);
+                tags.add(tag);
+            }
+        }
+        return tags;
+    }
 
     @Override
     public Post updatePost(PostCommand postCommand, String postId) {
@@ -61,11 +90,16 @@ public class PostServiceImpl implements PostService {
         tagService.deleteTags(postToDelete.getTags());
         commentService.deleteComments(postToDelete.getComments());
         likeService.deleteLikes(postToDelete.getLikes());
+        unLikeService.deleteUnLikes(postToDelete.getUnLikes());
         postRepository.delete(postToDelete);
     }
     @Override
     public List<PostRepresentation> getAll() {
-        return postMapper.toPostRepresentationList(postRepository.findAll().stream().toList());
+        List<PostRepresentation> postRepresentationList= postMapper.toPostRepresentationList(postRepository.findAll().stream().toList());
+        for(PostRepresentation postRepresentation:postRepresentationList){
+             postRepresentation=getInfos(postRepresentation,postRepository.findById(postRepresentation.getId()).get());
+        }
+        return postRepresentationList;
     }
 
 }

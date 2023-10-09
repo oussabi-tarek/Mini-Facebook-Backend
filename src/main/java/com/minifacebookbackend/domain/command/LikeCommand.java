@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LikeCommand {
+   private String id;
    private String postId;
    private String userId;
 }

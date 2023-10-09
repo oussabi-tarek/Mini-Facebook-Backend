@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostRepresentation {
+    private String id;
     private UserRepresentation user;
     private String createdDate;
     private String updatedDate;
@@ -23,4 +24,5 @@ public class PostRepresentation {
     private List<CommentRepresentation> comments;
     private List<ImageRepresentation> images;
     private List<LikeRepresentation> likes;
+    private List<UnLikeRepresentation> unLikes;
 }

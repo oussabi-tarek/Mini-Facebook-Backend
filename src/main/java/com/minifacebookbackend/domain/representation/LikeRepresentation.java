@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class LikeRepresentation {
     private String id;
     private String userId;
+    private String postId;
 }

@@ -2,8 +2,11 @@ package com.minifacebookbackend.service.impl;
 
 import com.minifacebookbackend.domain.command.CommentCommand;
 import com.minifacebookbackend.domain.model.Comment;
+import com.minifacebookbackend.domain.representation.CommentRepresentation;
+import com.minifacebookbackend.mapper.CommentMapper;
 import com.minifacebookbackend.repository.CommentRepository;
 import com.minifacebookbackend.service.CommentService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,9 +16,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CommentServiceImpl implements CommentService {
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
+    private final UserServiceImpl userService;
     @Override
     public Comment saveComment(CommentCommand comment){
         if(comment == null){
@@ -47,6 +52,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void deleteComments(List<Comment> comments){
         commentRepository.deleteAll(comments);
+    }
+
+    @Override
+    public List<CommentRepresentation> getCommentsByPostId(String postId) {
+       List<Comment> commentList = commentRepository.findAllByPostId(postId);
+       List<CommentRepresentation> commentRepresentationList = commentMapper.toCommentRepresentationList(commentList);
+       for(CommentRepresentation commentRepresentation:commentRepresentationList){
+           for(Comment comment:commentList){
+               if(commentRepresentation.getId().equals(comment.getId())){
+                   commentRepresentation.setUser(userService.getById(comment.getUserId()));
+               }
+           }
+       }
+        return commentRepresentationList;
     }
 
 }
