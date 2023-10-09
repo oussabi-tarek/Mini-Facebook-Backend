@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(value = "like")
+@Document(value = "unLike")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class Like {
+public class UnLike {
     @Id
     private String id;
     private String userId;

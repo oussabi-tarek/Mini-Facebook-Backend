@@ -18,7 +18,7 @@ public class LikeResource {
     private final LikeService likeService;
 
     @PostMapping
-    public ResponseEntity<Like> saveLike(LikeCommand likeCommand){
+    public ResponseEntity<Like> saveLike(@RequestBody LikeCommand likeCommand){
         log.info("create a new like {}", likeCommand);
         return ResponseEntity.ok(likeService.saveLike(likeCommand));
     }

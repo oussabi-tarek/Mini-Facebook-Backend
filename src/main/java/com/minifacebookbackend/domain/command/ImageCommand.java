@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 @Data
 @Builder
@@ -13,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class ImageCommand {
  private String id;
  private String url;
+ private MultipartFile file;
  private String postId;
  @JsonProperty("isNew")
  private boolean isNew;

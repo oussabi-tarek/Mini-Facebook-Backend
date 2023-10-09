@@ -9,5 +9,6 @@ public class ResourcePath {
   public static final String USER="users";
   public static final String COMMENT="comments";
   public static final String LIKE="likes";
+  public static final String UNLIKE="unlikes";
   public static final String AUTHENTIFICATION = "auth";
 }

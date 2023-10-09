@@ -26,6 +26,8 @@ public class Post {
     @DBRef
     private List<Like> likes;
     @DBRef
+    private List<UnLike> unLikes;
+    @DBRef
     private List<Comment> comments;
     @DBRef
     private List<Tag> tags;

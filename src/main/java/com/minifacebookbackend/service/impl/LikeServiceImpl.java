@@ -2,8 +2,11 @@ package com.minifacebookbackend.service.impl;
 
 import com.minifacebookbackend.domain.command.LikeCommand;
 import com.minifacebookbackend.domain.model.Like;
+import com.minifacebookbackend.domain.representation.LikeRepresentation;
+import com.minifacebookbackend.mapper.LikeMapper;
 import com.minifacebookbackend.repository.LikeRepository;
 import com.minifacebookbackend.service.LikeService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -12,9 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class LikeServiceImpl implements LikeService {
-    @Autowired
-    private LikeRepository likeRepository;
+    private final LikeRepository likeRepository;
+    private final LikeMapper likeMapper;
     @Override
     public Like saveLike(LikeCommand like) {
         if(like == null){
@@ -24,6 +28,11 @@ public class LikeServiceImpl implements LikeService {
         likeToSave.setUserId(like.getUserId());
         likeToSave.setPostId(like.getPostId());
         return likeRepository.save(likeToSave) ;
+    }
+
+    @Override
+    public LikeRepresentation getLikeById(String likeId) {
+        return likeMapper.toLikeRepresentation(likeRepository.findById(likeId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "like id is not valid")));
     }
 
 
@@ -37,5 +46,9 @@ public class LikeServiceImpl implements LikeService {
         likeRepository.deleteAll(likes);
     }
 
+    @Override
+    public List<LikeRepresentation> getLikesByPostId(String postId) {
+        return likeMapper.toLikeRepresentationList(likeRepository.findAllByPostId(postId));
+    }
 
 }
