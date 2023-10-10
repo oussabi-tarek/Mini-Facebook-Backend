@@ -1,6 +1,7 @@
 package com.minifacebookbackend.service;
 
 import com.minifacebookbackend.domain.command.PostCommand;
+import com.minifacebookbackend.domain.criterias.PostCriteria;
 import com.minifacebookbackend.domain.model.Post;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,5 +14,5 @@ public interface PostService {
     Post updatePost(PostCommand postCommand, String postId);
     void deletePost(String postId);
     PostRepresentation getPostById(String postId);
-    List<PostRepresentation> getAll();
+    List<PostRepresentation> getAll(PostCriteria postCriteria);
 }

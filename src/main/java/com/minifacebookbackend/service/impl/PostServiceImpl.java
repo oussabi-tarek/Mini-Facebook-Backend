@@ -2,6 +2,7 @@ package com.minifacebookbackend.service.impl;
 
 import com.minifacebookbackend.domain.command.PostCommand;
 import com.minifacebookbackend.domain.command.TagCommand;
+import com.minifacebookbackend.domain.criterias.PostCriteria;
 import com.minifacebookbackend.domain.model.Post;
 import com.minifacebookbackend.domain.representation.LikeRepresentation;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
@@ -39,12 +40,19 @@ public class PostServiceImpl implements PostService {
         return getInfos(postRepresentation,post);
     }
     public PostRepresentation getInfos(PostRepresentation postRepresentation,Post post){
+        System.out.println("1");
         postRepresentation.setUser(userService.getById(post.getUserId()));
+        System.out.println("2");
         postRepresentation.setLikes(likeService.getLikesByPostId(post.getId()));
+        System.out.println("3");
         postRepresentation.setTags(tagService.getTagsByPostId(post.getId()));
+        System.out.println("4");
         postRepresentation.setImages(imageService.getImagesByPostId(post.getId()));
+        System.out.println("5");
         postRepresentation.setComments(commentService.getCommentsByPostId(post.getId()));
+        System.out.println("6");
         postRepresentation.setUnLikes(unLikeService.getUnLikesByPostId(post.getId()));
+        System.out.println("7");
         return postRepresentation;
     }
 
@@ -94,11 +102,21 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(postToDelete);
     }
     @Override
-    public List<PostRepresentation> getAll() {
-        List<PostRepresentation> postRepresentationList= postMapper.toPostRepresentationList(postRepository.findAll().stream().toList());
+    public List<PostRepresentation> getAll(PostCriteria postCriteria) {
+        System.out.println("get all posts");
+        List<PostRepresentation> postRepresentationList= new ArrayList<>();
+        if(postCriteria.getContent()!=null && !postCriteria.getContent().isEmpty()){
+            System.out.println("get all posts by content"+postCriteria.getContent());
+            postRepresentationList= postMapper.toPostRepresentationList(postRepository.findAllByContentIgnoreCase(postCriteria.getContent()));
+            System.out.println("postRepresentationList: "+postRepresentationList);
+            System.out.println("postList: "+postRepository.findAllByContentIgnoreCase(postCriteria.getContent() ));
+        }
+        else
+         postRepresentationList= postMapper.toPostRepresentationList(postRepository.findAll().stream().toList());
         for(PostRepresentation postRepresentation:postRepresentationList){
              postRepresentation=getInfos(postRepresentation,postRepository.findById(postRepresentation.getId()).get());
         }
+        System.out.println("postRepresentationList: "+postRepresentationList);
         return postRepresentationList;
     }
 
