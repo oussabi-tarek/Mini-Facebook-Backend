@@ -83,4 +83,23 @@ public class ImageServiceImpl implements ImageService {
         return imageMapper.toImageRepresentation(imageRepository.findById(imageId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "image id is not valid")));
     }
 
+    @Override
+    public Image saveProfileImage(MultipartFile file, String userId) throws IOException {
+        Image image = new Image();
+        imageRepository.save(Image.builder()
+                .userId(userId)
+                .imageBytes(ImageUtils.compressImage(file.getBytes()))
+                .url("").build());
+        return image;
+    }
+
+    @Override
+    public ImageRepresentation getImageByUserId(String userId) {
+        Image image = imageRepository.findByUserId(userId);
+        if(image != null){
+            return getImage(image.getId());
+        }
+        return null;
+    }
+
 }

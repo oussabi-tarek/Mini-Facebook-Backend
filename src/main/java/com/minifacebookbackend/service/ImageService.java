@@ -17,4 +17,6 @@ public interface ImageService {
     void updateImages(List<ImageCommand> imageCommands);
     List<ImageRepresentation> getImagesByPostId(String postId);
     ImageRepresentation getImage(String imageId);
+    Image saveProfileImage(MultipartFile file, String userId) throws IOException;
+    ImageRepresentation getImageByUserId(String userId);
 }
