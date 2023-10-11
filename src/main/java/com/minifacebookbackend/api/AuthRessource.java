@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping(ResourcePath.AUTHENTIFICATION)
-@CrossOrigin("*")
+
 public class AuthRessource {
     @Autowired
     private ApiConsume apiConsume;
