@@ -37,10 +37,7 @@ public class SecurityConfig {
     public SessionAuthenticationStrategy sessionAuthenticationStrategy(){
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
-    @Bean
-    public RestTemplate restTemplate(){
-        return new RestTemplate();
-    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

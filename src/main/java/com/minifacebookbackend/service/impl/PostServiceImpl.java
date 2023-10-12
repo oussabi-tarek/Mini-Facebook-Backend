@@ -108,15 +108,12 @@ public class PostServiceImpl implements PostService {
         if(postCriteria.getContent()!=null && !postCriteria.getContent().isEmpty()){
             System.out.println("get all posts by content"+postCriteria.getContent());
             postRepresentationList= postMapper.toPostRepresentationList(postRepository.findAllByContentIgnoreCase(postCriteria.getContent()));
-            System.out.println("postRepresentationList: "+postRepresentationList);
-            System.out.println("postList: "+postRepository.findAllByContentIgnoreCase(postCriteria.getContent() ));
         }
         else
          postRepresentationList= postMapper.toPostRepresentationList(postRepository.findAll().stream().toList());
         for(PostRepresentation postRepresentation:postRepresentationList){
              postRepresentation=getInfos(postRepresentation,postRepository.findById(postRepresentation.getId()).get());
         }
-        System.out.println("postRepresentationList: "+postRepresentationList);
         return postRepresentationList;
     }
 
