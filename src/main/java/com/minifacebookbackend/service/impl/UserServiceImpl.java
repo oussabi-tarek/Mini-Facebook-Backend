@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserRepresentation getById(String userId){
+        System.out.println("user id : "+userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "user id is not valid"));
         return userMapper.toUserRepresentation(user);
     }

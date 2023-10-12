@@ -34,4 +34,6 @@ public class User {
   private List<Comment> comments;
   @DBRef
   private List<Like> likes;
+  @DBRef
+  private Image image;
 }

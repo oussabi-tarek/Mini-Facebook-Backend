@@ -18,4 +18,5 @@ public class Image {
     private String url;
     private String postId;
     private byte[] imageBytes;
+    private String userId;
 }

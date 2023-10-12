@@ -3,6 +3,7 @@ package com.minifacebookbackend.api;
 import com.minifacebookbackend.api.common.ResourcePath;
 import com.minifacebookbackend.domain.command.ImageCommand;
 import com.minifacebookbackend.domain.command.PostCommand;
+import com.minifacebookbackend.domain.criterias.PostCriteria;
 import com.minifacebookbackend.domain.model.Post;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
 import com.minifacebookbackend.service.PostService;
@@ -30,16 +31,17 @@ public class PostResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostRepresentation>> getAllPosts(){
-        log.info("Recuperation de tous les posts");
-        return ResponseEntity.ok(postService.getAll());
+    public ResponseEntity<List<PostRepresentation>> getAllPosts(PostCriteria postCriteria) {
+        log.info("Recuperation de tous les posts {}", postCriteria);
+        return ResponseEntity.ok(postService.getAll(postCriteria));
     }
 
     @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public ResponseEntity<Post> savePost(@RequestPart("userId") String userId,
+                                         @RequestPart("tags") String tags,
                                          @RequestPart("content") String content,
                                          @RequestPart("file") MultipartFile file) throws IOException {
-        log.info("ajouter un nouveau post : ");
+        log.info("ajouter un nouveau post : {}",tags);
         return ResponseEntity.ok(postService.savePost(userId, content, file));
     }
     @PutMapping("/{postId}")
