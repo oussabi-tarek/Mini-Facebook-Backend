@@ -7,7 +7,9 @@ import com.minifacebookbackend.service.impl.RegistrationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
@@ -24,8 +26,18 @@ public class AuthRessource {
         return apiConsume.authenticate(email, password);
     }
     @PostMapping("/register")
-    public ResponseEntity<?>  register(@RequestBody UserCommand userCommand){
-        return registrationService.register(userCommand);
+    public ResponseEntity<?> register(
+            @RequestPart("firstName") String firstName,
+            @RequestPart("lastName") String lastName,
+            @RequestPart("email") String email,
+            @RequestPart("password") String password,
+            @RequestPart("image") MultipartFile file) throws IOException {
+        System.out.println("First name "+firstName);
+        System.out.println("First name "+lastName);
+        System.out.println("First name "+email);
+        System.out.println("First name "+file.getName());
+        UserCommand userCommand = new UserCommand(firstName, lastName, email, password);
+        return registrationService.register(userCommand, file);
     }
     @PostMapping("/validateToken")
     public ResponseEntity<HashMap<String,Object>> validateToken(String token){
