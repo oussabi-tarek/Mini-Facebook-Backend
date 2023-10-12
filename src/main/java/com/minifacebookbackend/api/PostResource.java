@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(ResourcePath.POST)
@@ -31,16 +32,18 @@ public class PostResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostRepresentation>> getAllPosts(PostCriteria postCriteria) {
+    public ResponseEntity<List<PostRepresentation>> getAllPosts(@RequestParam Map<String, String> requestBody){
+        PostCriteria postCriteria = new PostCriteria();
+        postCriteria.setContent(requestBody.get("content"));
         log.info("Recuperation de tous les posts {}", postCriteria);
         return ResponseEntity.ok(postService.getAll(postCriteria));
     }
 
     @PostMapping(consumes = {"multipart/form-data", "application/json"})
     public ResponseEntity<Post> savePost(@RequestPart("userId") String userId,
-                                         @RequestPart("tags") String tags,
+                                         @RequestPart(value = "tags",required = false)  String tags,
                                          @RequestPart("content") String content,
-                                         @RequestPart("file") MultipartFile file) throws IOException {
+                                         @RequestPart(value = "file",required = false) MultipartFile file) throws IOException {
         log.info("ajouter un nouveau post : {}",tags);
         return ResponseEntity.ok(postService.savePost(userId, content, file));
     }
