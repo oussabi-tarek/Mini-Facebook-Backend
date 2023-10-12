@@ -15,4 +15,6 @@ public interface PostService {
     void deletePost(String postId);
     PostRepresentation getPostById(String postId);
     List<PostRepresentation> getAll(PostCriteria postCriteria);
+
+    List<PostRepresentation> findPostsByUserId(String userId);
 }

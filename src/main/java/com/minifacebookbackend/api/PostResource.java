@@ -57,6 +57,13 @@ public class PostResource {
         return ResponseEntity.ok("Post deleted successfully");
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostRepresentation>> getAllPosts(@PathVariable String userId) {
+        log.info("Recuperation de tous les posts du userId {}");
+        return ResponseEntity.ok(postService.findPostsByUserId(userId));
+    }
+
+
 
 
 }

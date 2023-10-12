@@ -120,4 +120,11 @@ public class PostServiceImpl implements PostService {
         return postRepresentationList;
     }
 
+    @Override
+    public List<PostRepresentation> findPostsByUserId(String userId) {
+        if(userId != null && !userId.isEmpty()){
+            return postMapper.toPostRepresentationList(postRepository.findPostsByUserId(userId));
+        }
+        return null;
+    }
 }
