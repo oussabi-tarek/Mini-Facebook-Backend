@@ -13,6 +13,6 @@ import java.util.List;
 public class PostCommand {
     private String content;
     private String userId;
-    private List<TagCommand> tags;
+    private String tags;
     private List<ImageCommand> images;
 }

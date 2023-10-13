@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PostService {
     Post savePost(String userId, String content, MultipartFile file) throws IOException;
-    PostRepresentation updatePost(PostCommand postCommand, String postId);
+    PostRepresentation updatePost(PostCommand postCommand,MultipartFile file,String postId);
     void deletePost(String postId);
     PostRepresentation getPostById(String postId);
     List<PostRepresentation> getAll(PostCriteria postCriteria);

@@ -1,7 +1,8 @@
 package com.minifacebookbackend.api;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minifacebookbackend.api.common.ResourcePath;
-import com.minifacebookbackend.domain.command.ImageCommand;
 import com.minifacebookbackend.domain.command.PostCommand;
 import com.minifacebookbackend.domain.criterias.PostCriteria;
 import com.minifacebookbackend.domain.model.Post;
@@ -9,6 +10,7 @@ import com.minifacebookbackend.domain.representation.PostRepresentation;
 import com.minifacebookbackend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,10 +49,19 @@ public class PostResource {
         log.info("ajouter un nouveau post : {}",tags);
         return ResponseEntity.ok(postService.savePost(userId, content, file));
     }
-    @PutMapping(value = "/{postId}", consumes = {"multipart/form-data", "application/json"})
-    public ResponseEntity<PostRepresentation> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId) {
+    @PutMapping(value = "/{postId}", consumes = {"multipart/form-data", MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PostRepresentation> updatePost(@RequestPart String post, @PathVariable String postId,
+                                                         @RequestPart(value = "file",required = false) MultipartFile file) {
+        PostCommand postCommand = new PostCommand();
+        try{
+            System.out.println("post:"+post);
+            ObjectMapper objectMapper = new ObjectMapper();
+            postCommand = objectMapper.readValue(post, PostCommand.class);
+
+        }catch (IOException e){
+        }
         log.info("modifier le post : {} ", postCommand);
-        return ResponseEntity.ok(postService.updatePost(postCommand, postId));
+        return ResponseEntity.ok(postService.updatePost(postCommand, file,postId));
     }
 
     @DeleteMapping("/{postId}")

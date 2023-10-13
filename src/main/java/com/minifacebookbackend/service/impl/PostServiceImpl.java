@@ -82,31 +82,31 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostRepresentation updatePost(PostCommand postCommand, String postId) {
+    public PostRepresentation updatePost(PostCommand postCommand, MultipartFile file,String postId) {
         Post postToUpdate = postRepository.findById(postId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "post id is not valid"));
         postToUpdate.setContent(postCommand.getContent());
         postToUpdate.setUpdatedDate(LocalDateTime.now().toString());
-        if(postCommand.getImages() != null &&  !postCommand.getImages().isEmpty()){
-            imageService.updateImages(postCommand.getImages());
-        }
-        tagService.updateTags(postCommand.getTags());
+        if(file!=null)
+            imageService.updateImages(file,postId);
+        if(postCommand.getTags()!=null && !postCommand.getTags().isEmpty())
+            tagService.saveTags(getTagsFromContent(postCommand.getContent(),postId));
+
         return postMapper.toPostRepresentation(postRepository.save(postToUpdate));
     }
 
     @Override
     public void deletePost(String postId) {
         Post postToDelete = postRepository.findById(postId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "post id is not valid"));
-        imageService.deleteImages(postToDelete.getImages());
-        tagService.deleteTags(postToDelete.getTags());
-        commentService.deleteComments(postToDelete.getComments());
-        likeService.deleteLikes(postToDelete.getLikes());
-        unLikeService.deleteUnLikes(postToDelete.getUnLikes());
-        postToDelete.setComments(null);
-        postToDelete.setImages(null);
-        postToDelete.setTags(null);
-        postToDelete.setUnLikes(null);
-        postToDelete.setUserId(null);
-        postRepository.save(postToDelete);
+        if(postToDelete.getImages()!=null && !postToDelete.getImages().isEmpty())
+          imageService.deleteImages(postToDelete.getImages());
+        if(postToDelete.getTags()!=null && !postToDelete.getTags().isEmpty())
+          tagService.deleteTags(postToDelete.getTags());
+        if(postToDelete.getComments()!=null && !postToDelete.getComments().isEmpty())
+          commentService.deleteComments(postToDelete.getComments());
+        if(postToDelete.getLikes()!=null && !postToDelete.getLikes().isEmpty())
+          likeService.deleteLikes(postToDelete.getLikes());
+        if(postToDelete.getUnLikes()!=null && !postToDelete.getUnLikes().isEmpty())
+            unLikeService.deleteUnLikes(postToDelete.getUnLikes());
         postRepository.delete(postToDelete);
     }
     @Override

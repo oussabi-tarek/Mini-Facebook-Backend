@@ -9,4 +9,5 @@ public interface ImageRepository extends MongoRepository<Image, String> {
 
     List<Image> findAllByPostId(String postId);
     Image findByUserId(String userId);
+    Image findByPostId(String postId);
 }

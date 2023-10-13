@@ -40,15 +40,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag updateTag(TagCommand tagCommand){
-            Tag tag=tagRepository.findById(tagCommand.getId()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag id is not valid"));
-            tag.setContent(tagCommand.getContent());
-            tag.setPostId(tagCommand.getPostId());
-            return tagRepository.save(tag);
-
-    }
-
-    @Override
     public void delete(String tagId) {
         Tag tag = tagRepository.findById(tagId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag id is not valid"));
         tagRepository.delete(tag);
@@ -56,12 +47,6 @@ public class TagServiceImpl implements TagService {
     @Override
     public void deleteTags(List<Tag> tags){
         tagRepository.deleteAll(tags);
-    }
-    @Override
-    public void updateTags(List<TagCommand> tags){
-        for (TagCommand tagCommand : tags) {
-            updateTag(tagCommand);
-        }
     }
 
     @Override
