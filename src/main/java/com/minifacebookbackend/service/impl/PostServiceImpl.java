@@ -82,13 +82,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(PostCommand postCommand, String postId) {
+    public PostRepresentation updatePost(PostCommand postCommand, String postId) {
         Post postToUpdate = postRepository.findById(postId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "post id is not valid"));
         postToUpdate.setContent(postCommand.getContent());
         postToUpdate.setUpdatedDate(LocalDateTime.now().toString());
-        imageService.updateImages(postCommand.getImages());
+        if(postCommand.getImages() != null &&  !postCommand.getImages().isEmpty()){
+            imageService.updateImages(postCommand.getImages());
+        }
         tagService.updateTags(postCommand.getTags());
-        return postRepository.save(postToUpdate);
+        return postMapper.toPostRepresentation(postRepository.save(postToUpdate));
     }
 
     @Override
@@ -99,6 +101,12 @@ public class PostServiceImpl implements PostService {
         commentService.deleteComments(postToDelete.getComments());
         likeService.deleteLikes(postToDelete.getLikes());
         unLikeService.deleteUnLikes(postToDelete.getUnLikes());
+        postToDelete.setComments(null);
+        postToDelete.setImages(null);
+        postToDelete.setTags(null);
+        postToDelete.setUnLikes(null);
+        postToDelete.setUserId(null);
+        postRepository.save(postToDelete);
         postRepository.delete(postToDelete);
     }
     @Override
@@ -117,4 +125,18 @@ public class PostServiceImpl implements PostService {
         return postRepresentationList;
     }
 
+    @Override
+    public List<PostRepresentation> findPostsByUserId(String userId) {
+        List<PostRepresentation> postRepresentationList = new ArrayList<>();
+        if(userId != null && !userId.isEmpty()){
+            //List<Post> postList = postRepository.findPostsByUserId(userId);
+            postRepresentationList= postMapper.toPostRepresentationList(postRepository.findPostsByUserId(userId).stream().toList());
+            for(PostRepresentation postRepresentation:postRepresentationList){
+                postRepresentation=getInfos(postRepresentation,postRepository.findById(postRepresentation.getId()).get());
+            }
+            System.out.println("postRepresentationList: "+postRepresentationList);
+            return postRepresentationList;
+        }
+        return null;
+    }
 }

@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping(ResourcePath.AUTHENTIFICATION)
-@CrossOrigin("*")
+
 public class AuthRessource {
     @Autowired
     private ApiConsume apiConsume;
@@ -36,7 +36,7 @@ public class AuthRessource {
         System.out.println("First name "+lastName);
         System.out.println("First name "+email);
         System.out.println("First name "+file.getName());
-        UserCommand userCommand = new UserCommand(firstName, lastName, email, password);
+        UserCommand userCommand = new UserCommand(firstName, lastName, email, password, null , null);
         return registrationService.register(userCommand, file);
     }
     @PostMapping("/validateToken")

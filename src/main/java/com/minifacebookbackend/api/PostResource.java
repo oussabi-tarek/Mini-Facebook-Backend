@@ -47,8 +47,8 @@ public class PostResource {
         log.info("ajouter un nouveau post : {}",tags);
         return ResponseEntity.ok(postService.savePost(userId, content, file));
     }
-    @PutMapping("/{postId}")
-    public ResponseEntity<Post> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId) {
+    @PutMapping(value = "/{postId}", consumes = {"multipart/form-data", "application/json"})
+    public ResponseEntity<PostRepresentation> updatePost(@RequestBody PostCommand postCommand, @PathVariable String postId) {
         log.info("modifier le post : {} ", postCommand);
         return ResponseEntity.ok(postService.updatePost(postCommand, postId));
     }
@@ -60,6 +60,10 @@ public class PostResource {
         return ResponseEntity.ok("Post deleted successfully");
     }
 
-
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PostRepresentation>> getPostsUsers(@PathVariable String userId) {
+        log.info("Recuperation de tous les posts du userId {}");
+        return ResponseEntity.ok(postService.findPostsByUserId(userId));
+    }
 
 }

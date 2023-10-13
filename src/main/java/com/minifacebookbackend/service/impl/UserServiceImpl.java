@@ -31,6 +31,8 @@ public class UserServiceImpl implements UserService {
         userToSave.setPassword(user.getPassword());
         userToSave.setLastName(user.getLastName());
         userToSave.setFirstName(user.getFirstName());
+        userToSave.setBiography(user.getBiography());
+        userToSave.setLocation(user.getLocation());
         userToSave.setCreatedAt(LocalDateTime.now().toString());
         return userRepository.save(userToSave);
     }
@@ -48,6 +50,8 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setPassword(userCommand.getPassword());
         userToUpdate.setLastName(userCommand.getLastName());
         userToUpdate.setFirstName(userCommand.getFirstName());
+        userToUpdate.setBiography(userCommand.getBiography());
+        userToUpdate.setLocation(userCommand.getLocation());
         return userRepository.save(userToUpdate);
     }
 

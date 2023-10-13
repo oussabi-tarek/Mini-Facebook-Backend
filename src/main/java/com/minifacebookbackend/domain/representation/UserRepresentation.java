@@ -18,6 +18,8 @@ public class UserRepresentation {
     private String lastName;
     private String email;
     private String password;
+    private String location;
+    private String biography;
     private String createdAt;
     private List<PostRepresentation> posts;
 }

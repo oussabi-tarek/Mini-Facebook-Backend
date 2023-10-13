@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.http.codec.multipart.Part;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class User {
   private String lastName;
   private String email;
   private String password;
+  private String location;
+  private String biography;
   private String createdAt;
   @DBRef
   private List<Post> posts;
