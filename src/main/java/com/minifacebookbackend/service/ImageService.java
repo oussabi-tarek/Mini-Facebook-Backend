@@ -14,7 +14,7 @@ public interface ImageService {
     void deleteImage(String imageId);
     List<Image> saveImages(MultipartFile file,String postId) throws IOException;
     void deleteImages(List<Image> images);
-    void updateImages(List<ImageCommand> imageCommands);
+    void updateImages(MultipartFile file,String postId) throws IOException;
     List<ImageRepresentation> getImagesByPostId(String postId);
     ImageRepresentation getImage(String imageId);
     Image saveProfileImage(MultipartFile file, String userId) throws IOException;

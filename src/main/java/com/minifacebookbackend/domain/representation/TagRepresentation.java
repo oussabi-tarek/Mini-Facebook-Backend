@@ -1,5 +1,6 @@
 package com.minifacebookbackend.domain.representation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -65,9 +65,13 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.deleteAll(images);
     }
     @Override
-    public void updateImages(List<ImageCommand> imageCommands){
-        for (ImageCommand imageCommand : imageCommands) {
-            updateImage(imageCommand);
+    public void updateImages(MultipartFile file, String postId) {
+        Image image = imageRepository.findByPostId(postId);
+        try {
+            image.setImageBytes(ImageUtils.compressImage(file.getBytes()));
+            imageRepository.save(image);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     @Override
