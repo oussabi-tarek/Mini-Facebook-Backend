@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ImageService {
     Image saveImage(ImageCommand imageCommand, String postId);
-    Image updateImage(ImageCommand imageCommand);
+    ImageRepresentation updateProfileImage(MultipartFile file, String userId) throws IOException;
     void deleteImage(String imageId);
     List<Image> saveImages(MultipartFile file,String postId) throws IOException;
     void deleteImages(List<Image> images);

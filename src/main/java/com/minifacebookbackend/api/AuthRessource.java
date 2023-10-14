@@ -32,10 +32,6 @@ public class AuthRessource {
             @RequestPart("email") String email,
             @RequestPart("password") String password,
             @RequestPart("image") MultipartFile file) throws IOException {
-        System.out.println("First name "+firstName);
-        System.out.println("First name "+lastName);
-        System.out.println("First name "+email);
-        System.out.println("First name "+file.getName());
         UserCommand userCommand = new UserCommand(firstName, lastName, email, password, null , null);
         return registrationService.register(userCommand, file);
     }
