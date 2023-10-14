@@ -13,4 +13,5 @@ public class ImageRepresentation {
     private String id;
     private String url;
     private byte[] imageBytes;
+    private String userId;
 }

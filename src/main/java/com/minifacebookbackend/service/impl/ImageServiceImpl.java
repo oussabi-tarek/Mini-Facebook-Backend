@@ -30,7 +30,9 @@ public class ImageServiceImpl implements ImageService {
         }
         Image imageToSave = new Image();
         imageToSave.setUrl(imageCommand.getUrl());
-        imageToSave.setPostId(postId);
+        if(!postId.isEmpty())
+            imageToSave.setPostId(postId);
+
         return imageRepository.save(imageToSave);
     }
     @Override
@@ -43,16 +45,19 @@ public class ImageServiceImpl implements ImageService {
         return images;
     }
     @Override
-    public Image updateImage(ImageCommand imageCommand) {
-        if(imageCommand.isNew()){
-            return saveImage(imageCommand,imageCommand.getPostId());
-        }else {
-           Image imageToUpdate = imageRepository.findById(imageCommand.getId()).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "image id is not valid"));
-           imageToUpdate.setUrl(imageCommand.getUrl());
-           imageToUpdate.setPostId(imageCommand.getPostId());
-           return imageRepository.save(imageToUpdate);
-        }
-
+    public ImageRepresentation updateProfileImage(MultipartFile file, String userId) throws IOException {
+            Image imageToUpdate = imageRepository.findByUserId(userId);
+            if(imageToUpdate != null && imageToUpdate.getUserId().equals(userId)){
+                imageToUpdate.setImageBytes(file.getBytes());
+                imageToUpdate.setUrl(file.getOriginalFilename());
+                System.out.println("iamge exist so  updating :      : "+file.getOriginalFilename());
+                return imageMapper.toImageRepresentation(imageRepository.save(imageToUpdate));
+            }
+            else{
+                // let's save new image
+                System.out.println("iamge new so  creating :      : "+file.getOriginalFilename());
+               return imageMapper.toImageRepresentation(saveProfileImage(file, userId));
+            }
     }
 
     @Override

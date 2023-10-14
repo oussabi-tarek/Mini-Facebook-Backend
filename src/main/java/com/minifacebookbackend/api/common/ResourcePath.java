@@ -12,4 +12,5 @@ public class ResourcePath {
   public static final String UNLIKE="unlikes";
   public static final String AUTHENTIFICATION = "auth";
     public static final String CHAT = "chat";
+    public static final String IMAGE = "images";
 }

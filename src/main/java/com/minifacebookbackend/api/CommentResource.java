@@ -20,19 +20,16 @@ public class CommentResource {
 
     @PostMapping
     public ResponseEntity<Comment> saveComment(@RequestBody CommentCommand commentCommand){
-        log.info("save a new comment {}",commentCommand);
         return ResponseEntity.ok(commentService.saveComment(commentCommand));
     }
 
     @PutMapping("/{commentId}")
     public ResponseEntity<Comment> updateComment(@RequestBody CommentCommand commentCommand,@PathVariable String commentId){
-        log.info("update comment {}",commentCommand);
         return ResponseEntity.ok(commentService.updateComment(commentCommand));
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable String commentId){
-        log.info("delete comment {}",commentId);
         commentService.deleteComment(commentId);
         return ResponseEntity.ok("comment deleted successfully");
     }

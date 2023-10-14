@@ -18,6 +18,7 @@ public class ImageCommand {
  private String url;
  private MultipartFile file;
  private String postId;
+ private String userId;
  @JsonProperty("isNew")
  private boolean isNew;
 }
