@@ -21,5 +21,6 @@ public class UserRepresentation {
     private String location;
     private String biography;
     private String createdAt;
+    private ImageRepresentation profile;
     private List<PostRepresentation> posts;
 }
