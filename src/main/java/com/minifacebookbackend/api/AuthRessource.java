@@ -30,9 +30,10 @@ public class AuthRessource {
             @RequestPart("firstName") String firstName,
             @RequestPart("lastName") String lastName,
             @RequestPart("email") String email,
+            @RequestPart("localisation") String localisation,
             @RequestPart("password") String password,
             @RequestPart(value = "image", required = false) MultipartFile file) throws IOException {
-        UserCommand userCommand = new UserCommand(firstName, lastName, email, password, null , null);
+        UserCommand userCommand = new UserCommand(firstName, lastName, email, password, localisation , null);
         return registrationService.register(userCommand, file);
     }
     @PostMapping("/validateToken")
