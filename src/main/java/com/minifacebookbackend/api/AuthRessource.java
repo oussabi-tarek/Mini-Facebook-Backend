@@ -31,7 +31,7 @@ public class AuthRessource {
             @RequestPart("lastName") String lastName,
             @RequestPart("email") String email,
             @RequestPart("password") String password,
-            @RequestPart("image") MultipartFile file) throws IOException {
+            @RequestPart(value = "image", required = false) MultipartFile file) throws IOException {
         UserCommand userCommand = new UserCommand(firstName, lastName, email, password, null , null);
         return registrationService.register(userCommand, file);
     }

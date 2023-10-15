@@ -95,10 +95,12 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image saveProfileImage(MultipartFile file, String userId) throws IOException {
         Image image = new Image();
-        imageRepository.save(Image.builder()
-                .userId(userId)
-                .imageBytes(ImageUtils.compressImage(file.getBytes()))
-                .url("").build());
+        if(file != null) {
+            imageRepository.save(Image.builder()
+                    .userId(userId)
+                    .imageBytes(ImageUtils.compressImage(file.getBytes()))
+                    .url("").build());
+        }
         return image;
     }
 
