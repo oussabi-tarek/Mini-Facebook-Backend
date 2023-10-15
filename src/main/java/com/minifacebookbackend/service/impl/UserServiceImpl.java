@@ -2,6 +2,7 @@ package com.minifacebookbackend.service.impl;
 
 import com.minifacebookbackend.domain.command.UserCommand;
 import com.minifacebookbackend.domain.model.User;
+import com.minifacebookbackend.domain.representation.ImageRepresentation;
 import com.minifacebookbackend.domain.representation.UserRepresentation;
 import com.minifacebookbackend.mapper.UserMapper;
 import com.minifacebookbackend.repository.UserRepository;
@@ -39,10 +40,12 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserRepresentation getById(String userId){
-        System.out.println("user id : "+userId);
         User user = userRepository.findById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "user id is not valid"));
         UserRepresentation userRepresentation = userMapper.toUserRepresentation(user);
-        userRepresentation.setProfile(imageService.getImageByUserId(userId));
+        ImageRepresentation image=imageService.getImageByUserId(userId);
+        if(image!=null){
+            userRepresentation.setProfile(image);
+        }
         return userRepresentation;
     }
 

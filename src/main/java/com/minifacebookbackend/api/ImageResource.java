@@ -25,7 +25,7 @@ public class ImageResource {
         return ResponseEntity.ok(imageService.getImageByUserId(userId));
     }
 
-    @PutMapping(value = "/user/{userId}", consumes = {"multipart/form-data",MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/user/{userId}", consumes = {"multipart/form-data"})
     public ResponseEntity<ImageRepresentation> updateUserProfile(@RequestPart(value = "file") MultipartFile file,@PathVariable("userId") String userId) throws IOException {
         log.info("am in the ressource for the update image Profile");
         System.out.println("receiving the request ...");

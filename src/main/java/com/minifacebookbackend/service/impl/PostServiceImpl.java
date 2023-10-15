@@ -133,7 +133,6 @@ public class PostServiceImpl implements PostService {
             for(PostRepresentation postRepresentation:postRepresentationList){
                 postRepresentation=getInfos(postRepresentation,postRepository.findById(postRepresentation.getId()).get());
             }
-            System.out.println("postRepresentationList: "+postRepresentationList);
             return postRepresentationList;
         }
         return null;

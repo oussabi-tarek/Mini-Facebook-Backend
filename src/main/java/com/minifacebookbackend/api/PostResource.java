@@ -1,6 +1,7 @@
 package com.minifacebookbackend.api;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minifacebookbackend.api.common.ResourcePath;
 import com.minifacebookbackend.domain.command.PostCommand;
@@ -36,6 +37,7 @@ public class PostResource {
     public ResponseEntity<List<PostRepresentation>> getAllPosts(@RequestParam Map<String, String> requestBody){
         PostCriteria postCriteria = new PostCriteria();
         postCriteria.setContent(requestBody.get("content"));
+        log.info("postCriteria: {}", postCriteria);
         return ResponseEntity.ok(postService.getAll(postCriteria));
     }
 
@@ -44,18 +46,18 @@ public class PostResource {
                                          @RequestPart(value = "tags",required = false)  String tags,
                                          @RequestPart("content") String content,
                                          @RequestPart(value = "file",required = false) MultipartFile file) throws IOException {
+        log.info("savePost: {}",file);
         return ResponseEntity.ok(postService.savePost(userId, content, file));
     }
+
     @PutMapping(value = "/{postId}", consumes = {"multipart/form-data", MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PostRepresentation> updatePost(@RequestPart String post, @PathVariable String postId,
-                                                         @RequestPart(value = "file",required = false) MultipartFile file) {
+                                                         @RequestPart(value = "file",required = false) MultipartFile file) throws JsonProcessingException {
         PostCommand postCommand = new PostCommand();
-        try{
+            System.out.println("post:"+post);
             ObjectMapper objectMapper = new ObjectMapper();
             postCommand = objectMapper.readValue(post, PostCommand.class);
-
-        }catch (IOException e){
-        }
+            log.info("modifier le post : {} ", postCommand);
         return ResponseEntity.ok(postService.updatePost(postCommand, file,postId));
     }
 
