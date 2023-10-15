@@ -30,13 +30,13 @@ public class UserResource {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserRepresentation> getById(@PathVariable String userId){
+        log.info("Loading user with id {}", userId);
         return ResponseEntity.ok(userService.getById(userId));
     }
     @GetMapping("/image/{userId}")
     public ResponseEntity<ImageRepresentation> getImageByUserId(@PathVariable String userId){
         return ResponseEntity.ok(imageService.getImageByUserId(userId));
     }
-
 
     @PostMapping
     public ResponseEntity<User> saveUser(@RequestBody UserCommand userCommand) {
