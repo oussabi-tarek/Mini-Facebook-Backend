@@ -43,6 +43,7 @@ public class LikeServiceImpl implements LikeService {
     }
     @Override
     public void deleteLikes(List<Like> likes){
+        System.out.println("like service : delete");
         likeRepository.deleteAll(likes);
     }
 
