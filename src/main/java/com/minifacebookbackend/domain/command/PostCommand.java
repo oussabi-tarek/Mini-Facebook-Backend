@@ -14,5 +14,4 @@ import java.util.List;
 public class PostCommand {
     private String content;
     private String userId;
-    private List<String> tags;
 }

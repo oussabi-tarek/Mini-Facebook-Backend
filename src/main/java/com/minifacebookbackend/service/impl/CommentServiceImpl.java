@@ -51,6 +51,7 @@ public class CommentServiceImpl implements CommentService {
     }
     @Override
     public void deleteComments(List<Comment> comments){
+        System.out.println("comment service : delete comments");
         commentRepository.deleteAll(comments);
     }
 

@@ -3,11 +3,13 @@ package com.minifacebookbackend.service.impl;
 import com.minifacebookbackend.domain.command.PostCommand;
 import com.minifacebookbackend.domain.command.TagCommand;
 import com.minifacebookbackend.domain.criterias.PostCriteria;
+import com.minifacebookbackend.domain.model.Image;
 import com.minifacebookbackend.domain.model.Post;
 import com.minifacebookbackend.domain.representation.LikeRepresentation;
 import com.minifacebookbackend.domain.representation.PostRepresentation;
 import com.minifacebookbackend.domain.representation.UserRepresentation;
 import com.minifacebookbackend.mapper.PostMapper;
+import com.minifacebookbackend.repository.ImageRepository;
 import com.minifacebookbackend.repository.PostRepository;
 import com.minifacebookbackend.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class PostServiceImpl implements PostService {
     private final LikeServiceImpl likeService;
     private final UnLikeServiceImpl unLikeService;
     private final UserServiceImpl userService;
+    private final ImageRepository imageRepository;
 
     @Override
     public PostRepresentation getPostById(String postId) {
@@ -88,8 +91,8 @@ public class PostServiceImpl implements PostService {
         postToUpdate.setUpdatedDate(LocalDateTime.now().toString());
         if(file!=null)
             imageService.updateImages(file,postId);
-        if(postCommand.getTags()!=null && !postCommand.getTags().isEmpty())
-            tagService.saveTags(getTagsFromContent(postCommand.getContent(),postId));
+        /*if(postCommand.getTags()!=null && !postCommand.getTags().isEmpty())
+            tagService.saveTags(getTagsFromContent(postCommand.getContent(),postId));*/
 
         return postMapper.toPostRepresentation(postRepository.save(postToUpdate));
     }
@@ -97,14 +100,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(String postId) {
         Post postToDelete = postRepository.findById(postId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "post id is not valid"));
-        if(postToDelete.getImages()!=null && !postToDelete.getImages().isEmpty())
-          imageService.deleteImages(postToDelete.getImages());
+        Image image = imageRepository.findByPostId(postId);
+        if(postToDelete.getImages()!=null) {
+            //imageService.deleteImages(postToDelete.getImages());
+            imageRepository.deleteById(image.getId());
+        }
         if(postToDelete.getTags()!=null && !postToDelete.getTags().isEmpty())
           tagService.deleteTags(postToDelete.getTags());
-        if(postToDelete.getComments()!=null && !postToDelete.getComments().isEmpty())
-          commentService.deleteComments(postToDelete.getComments());
-        if(postToDelete.getLikes()!=null && !postToDelete.getLikes().isEmpty())
-          likeService.deleteLikes(postToDelete.getLikes());
+        if(postToDelete.getComments()!=null && !postToDelete.getComments().isEmpty()) {
+            System.out.println("Delete comment ");
+            commentService.deleteComments(postToDelete.getComments());
+        }
+        if(postToDelete.getLikes()!=null && !postToDelete.getLikes().isEmpty()) {
+            System.out.println("Delete like ");
+            likeService.deleteLikes(postToDelete.getLikes());
+        }
         if(postToDelete.getUnLikes()!=null && !postToDelete.getUnLikes().isEmpty())
             unLikeService.deleteUnLikes(postToDelete.getUnLikes());
         postRepository.delete(postToDelete);

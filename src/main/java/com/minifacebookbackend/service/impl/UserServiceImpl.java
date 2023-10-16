@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(UserCommand userCommand, String userId) {
         User userToUpdate = userRepository.findById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "user id is not valid"));
-        userToUpdate.setEmail(userCommand.getEmail());
         userToUpdate.setPassword(userCommand.getPassword());
         userToUpdate.setLastName(userCommand.getLastName());
         userToUpdate.setFirstName(userCommand.getFirstName());
