@@ -33,6 +33,10 @@ public class AuthRessource {
             @RequestPart("localisation") String localisation,
             @RequestPart("password") String password,
             @RequestPart(value = "image", required = false) MultipartFile file) throws IOException {
+        System.out.println("email : "+email);
+        System.out.println("firstName : "+firstName);
+        System.out.println("lastName : "+lastName);
+        System.out.println("localisation : "+localisation);
         UserCommand userCommand = new UserCommand(firstName, lastName, email, password, localisation , null);
         return registrationService.register(userCommand, file);
     }

@@ -94,12 +94,13 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image saveProfileImage(MultipartFile file, String userId) throws IOException {
+        System.out.println("user id image : "+userId);
         Image image = new Image();
         if(file != null) {
-            imageRepository.save(Image.builder()
-                    .userId(userId)
-                    .imageBytes(ImageUtils.compressImage(file.getBytes()))
-                    .url("").build());
+            System.out.println("image != null "+file.getOriginalFilename());
+            image.setUserId(userId);
+            image.setImageBytes(file.getBytes());
+            return imageRepository.save(image);
         }
         return image;
     }
