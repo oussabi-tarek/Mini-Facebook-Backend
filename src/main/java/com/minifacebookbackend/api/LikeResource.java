@@ -14,19 +14,17 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @Slf4j
 public class LikeResource {
-
     private final LikeService likeService;
-
     @PostMapping
     public ResponseEntity<Like> saveLike(@RequestBody LikeCommand likeCommand){
+        log.info("like command : {}",likeCommand);
         return ResponseEntity.ok(likeService.saveLike(likeCommand));
     }
-
     @DeleteMapping("/{likeId}")
     public ResponseEntity<String> deleteLike(@PathVariable String likeId){
+        log.info("like id : {}",likeId);
         likeService.deleteLike(likeId);
         return ResponseEntity.ok("like deleted successfully");
     }
-
 
 }

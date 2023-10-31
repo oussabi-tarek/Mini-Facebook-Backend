@@ -7,7 +7,9 @@ import com.minifacebookbackend.domain.model.UnLike;
 import com.minifacebookbackend.domain.representation.LikeRepresentation;
 import com.minifacebookbackend.domain.representation.UnLikeRepresentation;
 import com.minifacebookbackend.mapper.UnLikeMapper;
+import com.minifacebookbackend.repository.LikeRepository;
 import com.minifacebookbackend.repository.UnLikeRepository;
+import com.minifacebookbackend.service.LikeService;
 import com.minifacebookbackend.service.UnlikeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ public class UnLikeServiceImpl implements UnlikeService {
 
     private final UnLikeRepository unLikeRepository;
     private final UnLikeMapper unLikeMapper;
+    private final LikeRepository likeRepository;
 
     @Override
     public UnLike saveUnLike(UnLikeCommand unlike) {
@@ -31,6 +34,8 @@ public class UnLikeServiceImpl implements UnlikeService {
         UnLike unlikeToSave = new UnLike();
         unlikeToSave.setUserId(unlike.getUserId());
         unlikeToSave.setPostId(unlike.getPostId());
+        likeRepository.deleteByUserIdAndPostId(unlike.getUserId(),unlike.getPostId());
+
         return unLikeRepository.save(unlikeToSave) ;
     }
 
@@ -38,6 +43,10 @@ public class UnLikeServiceImpl implements UnlikeService {
     public void deleteUnLike(String unlikeId) {
         UnLike like = unLikeRepository.findById(unlikeId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "like id is not valid"));
         unLikeRepository.delete(like);
+    }
+    @Override
+    public void deleteUnLikeByUserIdAndPostId(String userId, String postId) {
+        unLikeRepository.deleteByUserIdAndPostId(userId,postId);
     }
 
     @Override

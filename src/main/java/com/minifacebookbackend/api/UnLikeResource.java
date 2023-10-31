@@ -20,12 +20,14 @@ public class UnLikeResource {
     private final UnlikeService unlikeService;
 
     @PostMapping
-    public ResponseEntity<UnLike> saveLike(@RequestBody UnLikeCommand unlikeCommand){
+    public ResponseEntity<UnLike> saveUnLike(@RequestBody UnLikeCommand unlikeCommand){
+        log.info("unlike command : {}",unlikeCommand);
         return ResponseEntity.ok(unlikeService.saveUnLike(unlikeCommand));
     }
 
     @DeleteMapping("/{unlikeId}")
-    public ResponseEntity<String> deleteLike(@PathVariable String unlikeId){
+    public ResponseEntity<String> deleteUnLike(@PathVariable String unlikeId){
+        log.info("unlike id : {}",unlikeId);
         unlikeService.deleteUnLike(unlikeId);
         return ResponseEntity.ok("Unlike deleted successfully");
     }

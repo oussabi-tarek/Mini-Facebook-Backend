@@ -9,5 +9,7 @@ import java.util.List;
 public interface LikeRepository extends MongoRepository<Like, String> {
 
     List<Like> findAllByPostId(String postId);
+    void deleteByUserIdAndPostId(String userId, String postId);
+
 
 }

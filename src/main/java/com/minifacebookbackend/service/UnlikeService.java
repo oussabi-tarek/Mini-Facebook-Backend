@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface UnlikeService {
     UnLike saveUnLike(UnLikeCommand like);
+    void deleteUnLikeByUserIdAndPostId(String userId, String postId);
     void deleteUnLike(String unlikeId);
     void deleteUnLikes(List<UnLike> unlikes);
     List<UnLikeRepresentation> getUnLikesByPostId(String postId);

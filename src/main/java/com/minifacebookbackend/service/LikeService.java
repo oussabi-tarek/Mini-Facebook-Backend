@@ -9,6 +9,7 @@ import java.util.List;
 public interface LikeService {
     Like saveLike(LikeCommand like);
     void deleteLike(String likeId);
+    void deleteLikeByUserIdAndPostId(String userId, String postId);
     void deleteLikes(List<Like> likes);
     LikeRepresentation getLikeById(String likeId);
     List<LikeRepresentation> getLikesByPostId(String postId);

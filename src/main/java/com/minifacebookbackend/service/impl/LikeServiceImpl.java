@@ -6,6 +6,7 @@ import com.minifacebookbackend.domain.representation.LikeRepresentation;
 import com.minifacebookbackend.mapper.LikeMapper;
 import com.minifacebookbackend.repository.LikeRepository;
 import com.minifacebookbackend.service.LikeService;
+import com.minifacebookbackend.service.UnlikeService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 public class LikeServiceImpl implements LikeService {
     private final LikeRepository likeRepository;
     private final LikeMapper likeMapper;
+    private final UnlikeService unlikeService;
     @Override
     public Like saveLike(LikeCommand like) {
         if(like == null){
@@ -27,6 +29,8 @@ public class LikeServiceImpl implements LikeService {
         Like likeToSave = new Like();
         likeToSave.setUserId(like.getUserId());
         likeToSave.setPostId(like.getPostId());
+        unlikeService.deleteUnLikeByUserIdAndPostId(like.getUserId(),like.getPostId());
+
         return likeRepository.save(likeToSave) ;
     }
 
@@ -34,7 +38,10 @@ public class LikeServiceImpl implements LikeService {
     public LikeRepresentation getLikeById(String likeId) {
         return likeMapper.toLikeRepresentation(likeRepository.findById(likeId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "like id is not valid")));
     }
-
+    @Override
+    public void deleteLikeByUserIdAndPostId(String userId, String postId){
+        likeRepository.deleteByUserIdAndPostId(userId,postId);
+    }
 
     @Override
     public void deleteLike(String likeId) {
@@ -46,6 +53,7 @@ public class LikeServiceImpl implements LikeService {
         System.out.println("like service : delete");
         likeRepository.deleteAll(likes);
     }
+
 
     @Override
     public List<LikeRepresentation> getLikesByPostId(String postId) {
